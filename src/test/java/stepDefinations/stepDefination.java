@@ -3,6 +3,8 @@ package stepDefinations;
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
 import static org.hamcrest.Matchers.*;
+
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +33,7 @@ public class stepDefination  extends Utils {
 	TestDataBuild data= new TestDataBuild();
 
 	@Given("Add place Payload")
-	public void add_place_Payload() {		
+	public void add_place_Payload() throws FileNotFoundException {		
 		// Request Spec Builder-- reusable steps for all HTTPs methods		
 		// Response Spec Builder	reusable steps for all HTTPs methods
 		         res=given().spec(requestSpecification())
@@ -41,7 +43,7 @@ public class stepDefination  extends Utils {
 	@When("user calls {string} with POST HTTP request")
 	public void user_calls_with_POST_HTTP_request(String string) {
 		 response=res.when()
-			     .post("maps/api/place/add/json")		       
+			     .post("maps/api/plac/add/json")		       
 			     .then().spec(responseSpecification()).
 		       	  extract().response();	
 	}
