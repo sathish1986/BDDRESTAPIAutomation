@@ -13,6 +13,8 @@ import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 
@@ -47,6 +49,7 @@ public class Utils {
 		return resp;
 	}
 	
+	
 	public static String getGlobalValue(String key) throws IOException {
 		
 		Properties prop= new Properties();
@@ -55,5 +58,15 @@ public class Utils {
 	    return prop.getProperty(key);
 	     
 	}
+	
+	public String getJsonPath(Response response, String key) {
+		  String respon= response.asString();
+		  JsonPath jp= new JsonPath(respon);
+		  return jp.get(key).toString();
+
+	}
+	
+	
+	
 
 }

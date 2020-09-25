@@ -67,13 +67,22 @@ public void user_calls_with_HTTP_request(String resource, String method) {
 
 	@Then("{string} in response body is {string}")
 	public void in_response_body_is(String key, String expectedValue) {
-	  String respon= response.asString();
-	  JsonPath jp= new JsonPath(respon);
-	  assertEquals(jp.get(key).toString(),expectedValue);
-	  
-		
-		
+	
+	  assertEquals(getJsonPath(response, key),expectedValue);
 	}
+	
+	@Then("Verify place id created maps to {string} using {string}")
+	public void verify_place_id_created_maps_to_using(String expectedName, String resource) throws IOException {
+	    // prep request spec		
+		String place=getJsonPath(response, "place_id");
+		res=given().spec(requestSpecification()).queryParam("place_id",place );
+		
+		user_calls_with_HTTP_request(resource,  "GET");
+		String actualName =getJsonPath(response, "name");	
+		assertEquals(actualName, expectedName);		
+	}
+	
+	
 	
 	
 	
