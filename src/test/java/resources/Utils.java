@@ -1,8 +1,11 @@
 package resources;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Properties;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -15,15 +18,15 @@ import io.restassured.specification.ResponseSpecification;
 
 public class Utils {
 	
-	RequestSpecification req;
+	public static RequestSpecification req;
 	
-	public RequestSpecification requestSpecification() throws FileNotFoundException {
-		
+	public RequestSpecification requestSpecification() throws IOException {
+		if(req == null) {
 		PrintStream log = new PrintStream(new FileOutputStream("logging.txt"));
-		RestAssured.baseURI= "https://rahulshettyacademy.com";
+	//	RestAssured.baseURI= "https://rahulshettyacademy.com";
 		    req = new RequestSpecBuilder()				
 				.setContentType(ContentType.JSON)
-				.setBaseUri("https://rahulshettyacademy.com")
+				.setBaseUri(getGlobalValue("baseURI"))
 				.addQueryParam("key", "qaclick123")
 			    .addFilter(RequestLoggingFilter.logRequestTo(log)) 
 			    .addFilter(ResponseLoggingFilter.logResponseTo(log))
@@ -31,7 +34,8 @@ public class Utils {
 		    
 		    
 		    return req;
-		
+		}
+		return req;
 		
 	}
 	
@@ -41,6 +45,15 @@ public class Utils {
 				.expectContentType(ContentType.JSON)
 				.build();
 		return resp;
+	}
+	
+	public static String getGlobalValue(String key) throws IOException {
+		
+		Properties prop= new Properties();
+		FileInputStream fis = new FileInputStream("E:\\Selenium Projects\\BDDRESTAPIAutomation\\src\\test\\java\\resources\\global.properties");
+	    prop.load(fis);
+	    return prop.getProperty(key);
+	     
 	}
 
 }
